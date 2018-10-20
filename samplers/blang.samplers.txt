@@ -1,0 +1,6 @@
+--engine PT --engine.nThreads Fixed --engine.nThreads.number 1 --engine.nScans 100_000 --engine.nChains 1
+--engine PT --engine.nThreads Fixed --engine.nThreads.number 4 --engine.nScans 100_000 --engine.nChains 4
+--engine PT --engine.nThreads Fixed --engine.nThreads.number 4 --engine.nScans 100_000 --engine.nChains 10
+--engine PT --engine.nThreads Fixed --engine.nThreads.number 1 --engine.nScans 100_000 --engine.nChains 1 --engine.ladder Polynomial
+--engine PT --engine.nThreads Fixed --engine.nThreads.number 4 --engine.nScans 100_000 --engine.nChains 4 --engine.ladder Polynomial
+--engine PT --engine.nThreads Fixed --engine.nThreads.number 4 --engine.nScans 100_000 --engine.nChains 10 --engine.ladder Polynomial

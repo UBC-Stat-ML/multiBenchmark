@@ -1,0 +1,18 @@
+package challenger
+
+model Challenger {
+  random RealVar intercept ?: latentReal
+  random RealVar slope ?: latentReal
+  random List<IntVar> incidents
+  param List<RealVar> temperatures
+  
+  laws {
+    intercept ~ Normal(0.0, 100.0)
+    slope ~ Normal(0.0, 100.0)
+    
+    for (int i : 0 ..< incidents.size) {
+      incidents.get(i) | RealVar temperature = temperatures.get(i), intercept, slope 
+        ~ Bernoulli(logistic(intercept + slope * temperature))
+    }
+  }
+}

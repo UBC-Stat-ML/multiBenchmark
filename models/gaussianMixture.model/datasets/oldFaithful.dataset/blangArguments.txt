@@ -1,1 +1,1 @@
---model.data file data/oldFaithful.csv
+--model.data file dataset/oldFaithful.csv
