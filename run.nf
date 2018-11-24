@@ -52,6 +52,9 @@ process runBlang {
   modelPath=\$modelDir/\$modelName.bl
   # copy it since symlinks not picked up
   cp \$modelPath .
+  # copy any other java or xtend files
+  cp \$modelPath/*.java .
+  cp \$modelPath/*.xtend .
   # get the package too (assume it appear in first line)
   modelPackage=`head -n 1 \$modelPath | sed 's/package//' | sed 's/ //g' | sed 's/;//'`
   # get global model arguments
