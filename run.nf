@@ -1,6 +1,8 @@
 #!/usr/bin/env nextflow
 
-seeds = (1..2).collect{it}
+params.nSeeds = 1
+
+seeds = (1..params.nSeeds).collect{it}
 
 deliverableDir = 'deliverables/' + workflow.scriptName.replace('.nf','')
 
