@@ -4,7 +4,13 @@ seeds = (1..2).collect{it}
 
 deliverableDir = 'deliverables/' + workflow.scriptName.replace('.nf','')
 
-datasets = Channel.fromPath( 'models/*.model/datasets/*.dataset', type: 'dir' )
+params.datasetFilter = "all"
+
+datasets = Channel.fromPath( 'models/*.model/datasets/*.dataset', type: 'dir' ).filter{ 
+  result = params.datasetFilter.equals("all") || it.toString().contains(params.datasetFilter) 
+  if (result) println("Queuing model " + it.toString().replaceAll(".*models", ""))
+  return result
+}
 datasets.into {
   blangDatasets
 }
