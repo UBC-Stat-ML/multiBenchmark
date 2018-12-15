@@ -4,9 +4,20 @@ Usage
 Requires Java 8, UNIX, and git.
 
 ```
-./nextflow run run.nf -resume
+./nextflow run run.nf -resume 
 ```
 
+Or if you want to run on only one dataset:
+
+```
+./nextflow run run.nf -resume --datasetFilter DATASET_NAME 
+```
+
+You can also increase the number of random seeds with
+
+```
+./nextflow run run.nf -resume --nSeeds 10
+```
 
 Adding a Blang model
 --------------------
@@ -23,6 +34,7 @@ Adding a Blang sampler configuration
 ------------------------------------
 
 Just add a line in ``samplers/blang.samplers.txt`` for the arguments for that configuration. Each line will be ran with each dataset. 
+
 
 
 Adding a pyMC or other models
