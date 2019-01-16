@@ -1,0 +1,2 @@
+--model.data dataset/rugby.csv
+--model.match.name match_id
