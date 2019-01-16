@@ -1,0 +1,11 @@
+package mbench
+
+model TinyDiscrete {
+  param Double a ?: 1e6
+  random IntVar x ?: latentInt
+  
+  laws {
+    x ~ DiscreteUniform(-1, 2)
+    | x, a ~ LogPotential(abs(x) * log(a))
+  }
+}

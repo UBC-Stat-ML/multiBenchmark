@@ -1,0 +1,13 @@
+package mbench
+
+import blang.validation.internals.fixtures.Ising
+
+model SimpleIsing {
+  param Double beta 
+  param Integer N 
+  random List<IntVar> vertices ?: latentIntList(N*N)
+  
+  laws {
+    vertices | beta, N ~ Ising(beta, N)
+  }
+}

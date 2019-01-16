@@ -1,10 +1,18 @@
 #!/usr/bin/env nextflow
 
-seeds = (1..2).collect{it}
+params.nSeeds = 1
+
+seeds = (1..params.nSeeds).collect{it}
 
 deliverableDir = 'deliverables/' + workflow.scriptName.replace('.nf','')
 
-datasets = Channel.fromPath( 'models/*.model/datasets/*.dataset', type: 'dir' )
+params.datasetFilter = "all"
+
+datasets = Channel.fromPath( 'models/*.model/datasets/*.dataset', type: 'dir' ).filter{ 
+  result = params.datasetFilter.equals("all") || it.toString().contains(params.datasetFilter) 
+  if (result) println("Queuing model " + it.toString().replaceAll(".*models", ""))
+  return result
+}
 datasets.into {
   blangDatasets
 }
@@ -18,8 +26,7 @@ process buildBlang {
   input:
     val gitRepoName from 'blangSDK'
     val gitUser from 'UBC-Stat-ML'
-    val codeRevision from '796e5129d548d4a4f5263079b0b3eb57421d68de'
-    val snapshotPath from "${System.getProperty('user.home')}/w/blangSDK"
+    val codeRevision from 'd4996f852f742afd6781110c7bb07337c3c16797'
   output:
     file 'path' into blangPath
   """
