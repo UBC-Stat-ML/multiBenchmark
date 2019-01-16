@@ -1,0 +1,32 @@
+package blang.validations.internals.fixtures
+
+model rocketHierarchical {
+	// declare parameters and random variables
+	param GlobalDataSource rocketData
+	param Plate<Integer> years // new plate! 
+	param Plate<String> rocketFams
+	param Plated<IntVar> numLaunches  
+	random Plated<IntVar> numFails
+	
+	// additional parameters and variables needed for modeling
+	random Plated<RealVar> probFails
+	param RealVar a ?: 1, b ?: 1, c ?: 1, d ?: 1
+	random Plated<RealVar> As
+	random Plated<RealVar> Bs   
+	
+	laws {
+		// define relationships of random variables
+		for(Index<Integer> year: years.indices) {
+			As.get(year) | a,b ~ Gamma(a,b)
+			Bs.get(year) | c,d ~ Gamma(c,d)
+			for(Index<String> fam: rocketFams.indices(year)){
+				probFails.get(fam, year) | RealVar A = As.get(year),
+										   RealVar B = Bs.get(year) 
+										   ~ Beta(A,B)
+				numFails.get(fam, year) | RealVar probFail = probFails.get(year, fam),
+										  IntVar numLaunch = numLaunches.get(year, fam) 
+										  ~ Binomial(numLaunch, probFail)					
+				}
+			}
+		}
+}

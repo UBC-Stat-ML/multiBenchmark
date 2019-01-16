@@ -1,0 +1,5 @@
+--model.rocketData dataset/rocket.csv 
+--model.rocketFams.name LaunchVehicleFamily 
+--model.numLaunches.name NumberOfLaunches  
+--model.numFails.name NumberOfFailures 
+--model.years.name Year
