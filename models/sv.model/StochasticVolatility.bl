@@ -19,12 +19,12 @@ model StochasticVolatility {
 
     // Gaussian Random Walk
     for (int i : 1 ..< n) { 
-        s.get(i) | RealVar prev = s.get(i-1), sigma ~ Normal(prev, sigma*sigma)
+      s.get(i) | RealVar prev = s.get(i-1), sigma ~ Normal(prev, sigma*sigma)
     }
 
     for (int i : 0 ..< n) {
-        change.get(date.indices.get(i)) | nu, RealVar v = s.get(i) ~ StudentT(nu, 0, exp(v*2))
+      change.get(date.indices.get(i)) | nu, RealVar v = s.get(i) ~ StudentT(nu, 0, exp(v*2))
     }
 
   }
-}
+}  
