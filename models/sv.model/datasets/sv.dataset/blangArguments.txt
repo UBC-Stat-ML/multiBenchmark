@@ -1,0 +1,2 @@
+--model.data dataset/SP500.csv
+--model.date.name date
