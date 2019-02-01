@@ -1,0 +1,30 @@
+package sv
+
+model StochasticVolatility {
+
+  param GlobalDataSource data
+  param IntVar n ?: 400
+  param Plate<String> date
+  param Plated<RealVar> change
+  
+  random RealVar sigma     ?: latentReal
+  random RealVar        nu ?: latentReal
+  random List<RealVar>   s ?: latentRealList(n) 
+
+
+  laws {
+
+    sigma ~ Exponential(50.0)
+    nu ~ Exponential(0.1)
+
+    // Gaussian Random Walk
+    for (int i : 1 ..< n) { 
+      s.get(i) | RealVar prev = s.get(i-1), sigma ~ Normal(prev, sigma*sigma)
+    }
+
+    for (int i : 0 ..< n) {
+      change.get(date.indices.get(i)) | nu, RealVar v = s.get(i) ~ StudentT(nu, 0, exp(v*2))
+    }
+
+  }
+}  

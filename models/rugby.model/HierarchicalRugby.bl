@@ -11,54 +11,54 @@ import rugby.RugbyFn
 model HierarchicalRugby{
     
         
-    param GlobalDataSource data
-    param Plate<String> match
-    param Plated<Integer> i_home
-    param Plated<Integer> i_away
-    random Plated<IntVar> home_score
-    random Plated<IntVar> away_score
+  param GlobalDataSource data
+  param Plate<String> match
+  param Plated<Integer> i_home
+  param Plated<Integer> i_away
+  random Plated<IntVar> home_score
+  random Plated<IntVar> away_score
 
-    param Integer nTeams ?: 6
+  param Integer nTeams ?: 6
 
-    random RealVar
-            intercept    ?: latentReal,
-            home         ?: latentReal,
-            sd_atk       ?: latentReal,
-            sd_def       ?: latentReal
+  random RealVar
+    intercept    ?: latentReal,
+    home         ?: latentReal,
+    sd_atk       ?: latentReal,
+    sd_def       ?: latentReal
 
-    random List<RealVar> 
-            atks_star  ?: latentRealList(nTeams),
-            defs_star  ?: latentRealList(nTeams)
-            
+  random List<RealVar> 
+    atks_star  ?: latentRealList(nTeams),
+    defs_star  ?: latentRealList(nTeams)
+          
 
-    laws {
-        sd_atk ~ HalfStudentT(3, 2.5)
-        sd_def ~ HalfStudentT(3, 2.5)
+  laws {
+    sd_atk ~ HalfStudentT(3, 2.5)
+    sd_def ~ HalfStudentT(3, 2.5)
 
-        // _stars ~ N(0, sd_)
-        for (int i : 0 ..< nTeams) {
-            atks_star.get(i) | sd_atk
-                ~ Normal(0, sd_atk)
-            defs_star.get(i) | sd_def
-                ~ Normal(0, sd_def)
-        }
-
-        // Iterating over observations: score | parameters ~ Poisson(f(parameters)) for some function f. 
-        for (Index<String> match_id: match.indices) {
-            home_score.get(match_id) | IntVar i_a = i_away.get(match_id),
-                                       IntVar i_h = i_home.get(match_id),
-                                       atks_star,
-                                       defs_star,
-                                       intercept,
-                                       home
-                                       ~ Poisson(RugbyFn.computeTheta(atks_star, defs_star, i_h, i_a, intercept, home))
-            away_score.get(match_id) | IntVar i_a = i_away.get(match_id),
-                                       IntVar i_h = i_home.get(match_id),
-                                       atks_star,
-                                       defs_star,
-                                       intercept
-                                       ~ Poisson(RugbyFn.computeTheta(atks_star, defs_star, i_a, i_h, intercept, 0))
-        }
+    // _stars ~ N(0, sd_)
+    for (int i : 0 ..< nTeams) {
+      atks_star.get(i) | sd_atk
+          ~ Normal(0, sd_atk)
+      defs_star.get(i) | sd_def
+          ~ Normal(0, sd_def)
     }
+
+    // Iterating over observations: score | parameters ~ Poisson(f(parameters)) for some function f. 
+    for (Index<String> match_id: match.indices) {
+      home_score.get(match_id) | IntVar i_a = i_away.get(match_id),
+                                 IntVar i_h = i_home.get(match_id),
+                                 atks_star,
+                                 defs_star,
+                                 intercept,
+                                 home
+                                 ~ Poisson(RugbyFn.computeTheta(atks_star, defs_star, i_h, i_a, intercept, home))
+      away_score.get(match_id) | IntVar i_a = i_away.get(match_id),
+                                 IntVar i_h = i_home.get(match_id),
+                                 atks_star,
+                                 defs_star,
+                                 intercept
+                                 ~ Poisson(RugbyFn.computeTheta(atks_star, defs_star, i_a, i_h, intercept, 0))
+    }
+  }
 }
 
