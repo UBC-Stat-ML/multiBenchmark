@@ -26,7 +26,7 @@ process buildBlang {
   input:
     val gitRepoName from 'blangSDK'
     val gitUser from 'UBC-Stat-ML'
-    val codeRevision from '21b84f626eeb4374111dc31448cbf7d53479a155'
+    val codeRevision from '1d51a7a5757625ef505cd38796cb436d6f2ecd83'
   output:
     file 'path' into blangPath
   """
